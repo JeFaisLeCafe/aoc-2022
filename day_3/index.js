@@ -103,7 +103,6 @@ part1();
 
 function part2() {
   // same but with 3 bags instead of 2
-
   let sum = 0;
 
   // fn to return the character that is present in all of the str
@@ -111,6 +110,7 @@ function part2() {
     const arr1 = str1.split(""),
       arr2 = str2.split(""),
       arr3 = str3.split("");
+
     for (let c of arr1) {
       if (arr2.includes(c) && arr3.includes(c)) {
         return c;
@@ -130,5 +130,6 @@ function part2() {
   }
 
   console.log("part 2 sum", sum);
+  // 2602
 }
 part2();
