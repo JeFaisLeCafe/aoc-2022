@@ -1,0 +1,13 @@
+{
+  "name": "testing-vanilla-js",
+  "description": "Learn how to test your JavaScript.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.3.1"
+  }
+}
