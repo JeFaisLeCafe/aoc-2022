@@ -1,4 +1,4 @@
-const { part2, computeMyMove } = require("./index.js").default;
+import { computeMyMove } from "./index.js";
 // A, B, C = rock paper scissors by the opponent (them)
 // X, Y, Z = defeat equ victory by me
 
