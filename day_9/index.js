@@ -83,8 +83,18 @@ function computeNewTailPosition(
     newTailPosition = {
       ...formerTail
     };
-  } else {
+  } else if (distance === 2) {
     newTailPosition = { ...formerHeadPosition };
+  } else {
+    // edge case
+    const v = {
+      x: newHeadPosition.x - formerTail.x > 0 ? 1 : -1,
+      y: newHeadPosition.y - formerTail.y > 0 ? 1 : -1
+    };
+    newTailPosition = {
+      x: formerTail.x + v.x,
+      y: formerTail.y + v.y
+    };
   }
 
   return newTailPosition;
@@ -122,12 +132,9 @@ function part2() {
 
   // we'll keep track of each node position with this array
   for (let instruction of instructions) {
-    console.log("instruction", instruction);
     for (let i = 1; i <= instruction[1]; i++) {
       const newPositions = computeAllNextIncrement(positions, instruction[0]);
       positions = [...newPositions];
-
-      console.log("positions", positions);
 
       // now we want to update only the array of unique tail position (if i = 9)
       if (
@@ -141,6 +148,24 @@ function part2() {
   }
 
   console.log("part2: ", visitedTailPositions, visitedTailPositions.length);
+  display(visitedTailPositions);
   return visitedTailPositions.length;
 }
 part2();
+
+function display(tailPos) {
+  const size = 30;
+  const offset = size / 2;
+
+  let grid = new Array(size).fill(new Array(size).fill("."));
+  for (let pos of tailPos) {
+    const newGrid = JSON.parse(JSON.stringify(grid));
+    newGrid[pos.y + offset][pos.x + offset] = "#";
+    grid = newGrid;
+  }
+  console.log(formatScreen(grid));
+}
+
+function formatScreen(screen) {
+  return screen.map((l) => l.join(""));
+}
