@@ -154,7 +154,7 @@ function part2() {
 part2();
 
 function display(tailPos) {
-  const size = 30;
+  const size = 24;
   const offset = size / 2;
 
   let grid = new Array(size).fill(new Array(size).fill("."));

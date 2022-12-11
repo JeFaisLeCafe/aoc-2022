@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/JeFaisLeCafe/aoc-2022/issues"
   },
-  "homepage": "https://github.com/JeFaisLeCafe/aoc-2022#readme"
+  "homepage": "https://github.com/JeFaisLeCafe/aoc-2022#readme",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
 }
