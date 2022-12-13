@@ -1,5 +1,4 @@
 import { readFileSync } from "fs";
-
 const file = readFileSync(new URL("./input", import.meta.url)).toString();
 const map = file.split("\n").map((line) => line.split(""));
 
@@ -54,49 +53,8 @@ function getAdjacentNodes(node) {
   // down
   if (node.y + 1 < map.length) res.push(new Node(node.x, node.y + 1));
 
-  //   res.push(
-  //     nodeMap[node.y][node.x - 1],
-  //     nodeMap[node.y][node.x + 1],
-  //     nodeMap[node.y - 1][node.x],
-  //     nodeMap[node.y + 1][node.x]
-  //   );
-
   return res.filter((n) => getNodeName(n) !== getNodeName(startingNode)); // return everything except starting node
 }
-
-// const nodeMap = map.map((line, y) => {
-//   return line.map((v, x) => {
-//     const node = new Node(x, y);
-//     node.weight = v / getDistance(node, endNode);
-//     return node;
-//   });
-// });
-
-// function getTargetNodes(sNode) {
-//   // function returning a graph, that is the different nodes and where they point to
-//   // for each node, we find all next nodes,
-//   // need to check all 4 adjacent nodes
-//   const targetNodes = getAdjacentNodes(sNode)
-//     .filter((node) => {
-//       return sNode.value + 1 >= node.value;
-//     })
-//     .map((n) => {
-//       n.weight = n.value / getDistance(n, endNode);
-//       return n;
-//     });
-
-//   return targetNodes;
-// }
-
-// const getGraph = () => {
-//   let res = {};
-//   nodeMap.forEach((n) => {
-//     const tn = getTargetNodes(n);
-//     n.targetNodes = tn;
-//     res[getNodeName(n)] = n;
-//   });
-//   return res;
-// };
 
 const getGraph = (sNode, graph = {}) => {
   // function returning a graph, that is the different nodes and where they point to
@@ -117,22 +75,20 @@ const getGraph = (sNode, graph = {}) => {
   if (
     node.targetNodes.length > 1 ||
     getNodeName(endNode) === getNodeName(sNode)
-  )
+  ) {
     graph[getNodeName(sNode)] = node;
-  if (Object.keys(graph).includes(getNodeName(endNode))) {
-    return graph;
-  } else {
-    for (let tNode of targetNodes.filter(
-      (node) => !Object.keys(graph).includes(`node${node.x}${node.y}`)
-    )) {
-      getGraph(tNode, graph);
-    }
   }
+  for (let tNode of targetNodes.filter(
+    (node) => !Object.keys(graph).includes(getNodeName(node))
+  )) {
+    getGraph(tNode, graph);
+  }
+
   return graph;
 };
 
 function getNodeName(node) {
-  return `node${node.x}${node.y}`;
+  return `node${node.x}-${node.y}`;
 }
 
 function drawPath(path) {
@@ -156,7 +112,8 @@ function drawPath(path) {
 }
 
 function part1() {
-  const graph = getGraph(startingNode);
+  let graph = getGraph(startingNode);
+  // console.log("GRAF", graph);
   // we have the graph, now we need to create a path
   let path = [graph[getNodeName(startingNode)]]; // a serie of nodes
 
@@ -174,8 +131,12 @@ function part1() {
           "ERROR ! : ",
           availableNodes,
           availableNodes.length > 0,
-          returnNodeName
+          graph[nodeName]
         );
+
+        if (!graph[returnNodeName]) {
+          graph = getGraph(returnNode, graph);
+        }
       }
       returnNode.isVisited = true;
 
