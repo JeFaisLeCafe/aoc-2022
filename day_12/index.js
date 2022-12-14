@@ -72,12 +72,9 @@ const getGraph = (sNode, graph = {}) => {
   const node = new Node(sNode.x, sNode.y);
   node.weight = sNode.value / getDistance(sNode, endNode);
   node.targetNodes = targetNodes.sort((a, b) => b.weight - a.weight);
-  if (
-    node.targetNodes.length > 1 ||
-    getNodeName(endNode) === getNodeName(sNode)
-  ) {
-    graph[getNodeName(sNode)] = node;
-  }
+
+  graph[getNodeName(sNode)] = node;
+
   for (let tNode of targetNodes.filter(
     (node) => !Object.keys(graph).includes(getNodeName(node))
   )) {
@@ -106,6 +103,9 @@ function drawPath(path) {
     if (n.x - prev.x < 0) res[prev.y][prev.x] = "<"; // x shrinks we go left
     if (n.y - prev.y > 0) res[prev.y][prev.x] = "⌄"; // y grows we go down
     if (n.y - prev.y < 0) res[prev.y][prev.x] = "^"; // y shrinks we go up
+
+    if (i === 1) res[prev.y][prev.x] = "S"; // start
+    if (i === path.length - 1) res[prev.y][prev.x] = "E"; // END
   }
   console.log("PATH\n", res.map((l) => l.join("")).join("\n"));
   return res;
