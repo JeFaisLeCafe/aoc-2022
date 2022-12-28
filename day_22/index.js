@@ -37,20 +37,31 @@ function move(direction, distance, startX, startY) {
     x: direction === 0 ? 1 : direction === 180 ? -1 : 0,
     y: direction === 90 ? -1 : direction === 270 ? 1 : 0
   };
-  for (let i = 0; i < distance; i++) {
+  for (let i = 0; i <= distance; i++) {
     // we look ahead to check if movement possible
     // different cases: normal, wrap, or blocked
     // for the wrapping we need to get the actual row/col size
     finalX = startX + i * directionMovement.x;
     finalY = startY + i * directionMovement.y;
     if (!map?.[finalY]?.[finalX]) {
+      console.log(
+        "We should have wrapped around",
+        {
+          finalX,
+          finalY
+        },
+        map?.[finalY]?.[finalX],
+        !map?.[finalY]?.[finalX],
+        map?.[finalY]?.[finalX] == ""
+      );
       let m = 0;
       // we might need to wrap around
       // we need to look up what's next and find if the next tile is a wall or not
-      while (map?.[finalY]?.[finalX] === "") {
+      while (!map?.[finalY]?.[finalX] || map?.[finalY]?.[finalX] == "") {
+        console.log("IN WHILE", m);
         // we keep looking for what's next
-        finalY = (finalY + m * directionMovement.y) % globalColSize;
-        finalX = (finalX + m * directionMovement.x) % globalRowSize;
+        finalY = (finalY + m * directionMovement.y) % (globalColSize - 1);
+        finalX = (finalX + m * directionMovement.x) % (globalRowSize - 1);
         m++;
       }
     } else if (map[finalY][finalX] === "#") {
@@ -61,6 +72,7 @@ function move(direction, distance, startX, startY) {
       };
     }
     map[finalY] = map[finalY].replaceAt(finalX, moveSign[direction]);
+
     console.log("added ", moveSign[direction], " at position ", {
       finalX,
       finalY

@@ -1,7 +1,5 @@
-// load fs
-const fs = require("fs");
-// read the file
-const content = fs.readFileSync("./input").toString();
+import { readFileSync } from "fs";
+const content = readFileSync(new URL("./input", import.meta.url)).toString();
 // each row is a backpack content
 const data = content.split("\n");
 const formattedData = data.map((line) => line.split(","));
